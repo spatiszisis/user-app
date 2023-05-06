@@ -1,10 +1,13 @@
+import { Address } from "./address.model";
+import { Gender } from "./gender.enum";
+
 export class User {
     name: string;
     surname: string;
-    gender: string;
-    birthdate: any;
-    workAddress?: string;
-    homeAddress?: string;
+    gender: Gender;
+    birthdate: string;
+    workAddress?: Address;
+    homeAddress?: Address;
 
 
     deserialize(input: any): this {

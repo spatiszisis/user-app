@@ -1,4 +1,4 @@
-<form [formGroup]='userForm' (submit)="onCreate()">
+<form [formGroup]='userForm'>
         <div class="form-group" [ngClass]="{'has-error': hasErrorName}">
             <label for="name" class="form-label required">Name</label>
             <input type="text" class="form-control" id="name" formControlName='name'
@@ -18,7 +18,8 @@
             <select class="form-select" id="gender" formControlName='gender' [ngClass]="{'is-invalid': hasErrorGender}"
                 required>
                 <option value="">Choose Gender...</option>
-                <option *ngFor="let gender of genders" [value]="gender">{{gender}}</option>
+                <option [value]="gender.FEMALE">{{gender.FEMALE}}</option>
+                <option [value]="gender.MALE">{{gender.MALE}}</option>
             </select>
             <span class="form-text" *ngIf="hasErrorGender">Gender is required</span>
         </div>
@@ -44,5 +45,9 @@
             <input type="text" class="form-control" id="homeAddress" formControlName='homeAddress'>
         </div>
 
-        <button class="btn btn-primary mt-4" type="submit">{{!!user.name ? 'Edit' : 'Save'}}</button>
+        <div class="mt-4" [ngClass]="{'d-flex': !!user.name}">
+            <button class="btn btn-primary" type="button" (click)="onCreate()">{{!!user.name ? 'Edit' : 'Save'}}</button>
+            <button *ngIf="!!user.name" class="btn btn-danger mx-2" type="button" (click)="handleOnDelete()">Delete</button>
+            <button *ngIf="!!user.name" class="btn btn-secondary" type="button" (click)="handleOnCancel()">Cancel</button>
+        </div>
     </form>

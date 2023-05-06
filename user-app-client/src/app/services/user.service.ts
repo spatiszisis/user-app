@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, map, mergeMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
@@ -18,29 +18,30 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     public getAllUsers(): Observable<User[]> {
-        return this.http.get<User[]>(this.BASE_PATH).pipe(
+        return this.http.get<User[]>(`${this.BASE_PATH}/all`).pipe(
             map((json: User[]) => json),
             tap((users: User[]) => this.users.next(users))
         );
     }
 
-    public getUser(id: number): Observable<User> {
-        return this.http.get(`${this.BASE_PATH}/${id}`).pipe(
-            map((json: any) => json.data),
+    public getUser(name: string, surname: string): Observable<User> {
+        const params: HttpParams = new HttpParams().set('name', name).set('surname', surname);
+        return this.http.get(this.BASE_PATH, { params }).pipe(
+            map((json: any) => json),
             tap((user: User) => this.user.next(user))
         );
     }
 
     public createUser(user: User): Observable<User> {
         return this.http.post(this.BASE_PATH, user).pipe(
-            map((json: any) => json.data),
+            map((json: any) => json),
             mergeMap((user: User) => this.getAllUsers().pipe(map(() => user)))
         );
     }
 
     public updateUser(userUpdate: any): Observable<User> {
         return this.http.put<User>(this.BASE_PATH, userUpdate).pipe(
-            map((json: any) => json.data),
+            map((json: any) => json),
             tap((user: User) => this.user.next(user))
         );
     }

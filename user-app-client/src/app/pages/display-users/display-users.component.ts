@@ -12,46 +12,57 @@ export class DisplayUsersComponent implements OnInit {
 
   users$: Observable<User[]>;
   selectedUser: User;
-  userTest = new User().deserialize({
-    birthdate: { year: 2023, month: 5, day: 4 },
-    gender: "Female",
-    homeAddress: null,
-    name: "asd",
-    surname: "asd",
-    workAddress: "AGLAIS 13 EYOSMOS"
-  });
-  onInit = false;
+  selectedUserLi: any;
 
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.users$ = this.userService.users$;
-    this.onInit = true;
   }
 
   handleOnSubmit(user: any) {
     console.log(user);
   }
 
-  onEditUser() {
-    this.onInit = false;
-    const tabList = document.getElementById('tabList');
-    var li = document.createElement("li");
-    li.setAttribute("class", "nav-item mx-2");
-    li.setAttribute("role", "presentation");
-    li.setAttribute("id", `id${'zisis'}`);
-    tabList.appendChild(li);
+  handleOnDelete() {
+    this.clearUser();
+  }
 
-    const dynamicLi = document.getElementById(`id${'zisis'}`);
+  handleOnCancel() {
+    this.clearUser();
+  }
+
+  onEditUser(user: User) {
+    this.userService.getUser(user.name, user.surname).subscribe((user: User) => {
+      this.selectedUser = user;
+      this.createEditTab(user.name);
+    }); 
+  }
+
+  private clearUser() {
+    this.selectedUser = undefined;
+    this.selectedUserLi.remove();
+
+  }
+
+  private createEditTab(userName: string) {
+    const tabList = document.getElementById('tabList');
+    this.selectedUserLi = document.createElement("li");
+    this.selectedUserLi.setAttribute("class", "nav-item mx-2");
+    this.selectedUserLi.setAttribute("role", "presentation");
+    this.selectedUserLi.setAttribute("id", `id${userName}`);
+    tabList.appendChild(this.selectedUserLi);
+
+    const dynamicLi = document.getElementById(`id${userName}`);
     var button = document.createElement('button');
     button.appendChild(document.createTextNode("Zisis"));
     button.setAttribute("class", "nav-link show active");
-    button.setAttribute("id", `profile-tab-pane`);
+    button.setAttribute("id", 'nav-user-tab');
     button.setAttribute("data-bs-toggle", 'tab');
-    button.setAttribute("data-bs-target", '#profile-tab-pane');
+    button.setAttribute("data-bs-target", '#nav-user');
     button.setAttribute("type", 'button');
     button.setAttribute("role", 'tab');
-    button.setAttribute("aria-controls", 'profile-tab-pane');
+    button.setAttribute("aria-controls", 'nav-user');
     button.setAttribute("aria-selected", 'false');
     dynamicLi.appendChild(button);
   }
