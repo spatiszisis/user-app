@@ -19,8 +19,10 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> getUsers(@RequestParam(value = "searchTerm", required = false) String searchTerm) {
-        return ResponseEntity.ok(userService.getAllUsers(searchTerm));
+    public ResponseEntity<List<User>> getUsers(
+            @RequestParam(value = "searchTerm", required = false) String searchTerm,
+            @RequestParam(value = "sort", required = false) String sort) {
+        return ResponseEntity.ok(userService.getAllUsers(searchTerm, sort));
     }
 
     @GetMapping()

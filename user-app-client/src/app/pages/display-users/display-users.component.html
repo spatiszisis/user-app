@@ -11,7 +11,15 @@
         <div class="row mt-4">
             <div class="input-group flex-nowrap">
                 <span class="input-group-text" id="addon-wrapping"><i class="bi bi-search"></i></span>
-                <input type="search" class="form-control" placeholder="Search by name or surname" (input)="onSearch($event)">
+                <input type="search" class="form-control" placeholder="Search by name or surname"
+                    (input)="onSearch($event)">
+            </div>
+            <div class="mt-4">
+                <select class="form-select" (change)="onSortByName($event)">
+                    <option value="">Default</option>
+                    <option [value]="sortOptions.ASC">Ascending</option>
+                    <option [value]="sortOptions.DESC">Descending</option>
+                </select>
             </div>
         </div>
     </ng-container>
@@ -30,15 +38,14 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Surname</th>
                             </tr>
                         </thead>
                         <tbody>
                             <ng-container *ngIf="(users$ | async)?.length > 0; else loading">
-                                <tr *ngFor="let user of (users$ | async)" class="cursor-pointer" (click)="onEditUser(user)">
-                                    <td>#</td>
+                                <tr *ngFor="let user of (users$ | async)" class="cursor-pointer"
+                                    (click)="onEditUser(user)">
                                     <td>{{user.name}}</td>
                                     <td>{{user.surname}}</td>
                                 </tr>
@@ -55,11 +62,9 @@
             <div *ngIf="selectedUser" class="users-tab" [ngClass]="{'fade': !selectedUser}" id="nav-user"
                 role="tabpanel" aria-labelledby="nav-user-tab" tabindex="0">
                 <div class="p-3">
-                    <app-user-form 
-                        [user]="selectedUser"
-                        [subscription]="updateUserSubscription || removeUserSubscription" 
-                        (onSubmit)="handleOnUpdateUser($event)"
-                        (onDelete)="handleOnDelete($event)" 
+                    <app-user-form [user]="selectedUser"
+                        [subscription]="updateUserSubscription || removeUserSubscription"
+                        (onSubmit)="handleOnUpdateUser($event)" (onDelete)="handleOnDelete($event)"
                         (onCancel)="handleOnCancel()"></app-user-form>
                 </div>
             </div>

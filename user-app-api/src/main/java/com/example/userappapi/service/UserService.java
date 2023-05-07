@@ -3,6 +3,7 @@ package com.example.userappapi.service;
 import com.example.userappapi.exception.ResourceNotFoundException;
 import com.example.userappapi.model.User;
 import com.example.userappapi.repository.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -17,9 +18,19 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getAllUsers(String filterText) {
-        if (filterText == null || filterText.isEmpty()) {
-            return userRepository.findAll();
+    public List<User> getAllUsers(String filterText, String sort) {
+        if (filterText == null) {
+            if (sort != null) {
+                if (sort.equals("DESC")) {
+                    return userRepository.findAll(Sort.by(Sort.Direction.DESC, "name"));
+                } else if (sort.equals("ASC")) {
+                    return userRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+                } else {
+                    return userRepository.findAll();
+                }
+            } else {
+                return userRepository.findAll();
+            }
         } else {
             return userRepository.search(filterText);
         }

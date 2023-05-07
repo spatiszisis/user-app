@@ -4,6 +4,7 @@ import { User } from 'src/app/models/user.model';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
+import { SortOptions } from 'src/app/models/sort.enum';
 
 @Component({
   selector: 'app-display-users',
@@ -20,6 +21,7 @@ export class DisplayUsersComponent implements OnInit {
   isSearching = false;
   updateUserSubscription: Subscription;
   removeUserSubscription: Subscription;
+  sortOptions = SortOptions;
 
   constructor(private userService: UserService, private toastService: ToastService) { }
 
@@ -65,6 +67,11 @@ export class DisplayUsersComponent implements OnInit {
 
   onClearSearch() {
     this.searchTerm.next('');
+  }
+
+  onSortByName(sort: any) {
+    console.log(sort.target.value);
+    this.userService.getAllUsers(null, sort.target.value as SortOptions).subscribe();
   }
 
   private clearUser() {

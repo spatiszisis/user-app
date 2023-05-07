@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, map, mergeMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
+import { SortOptions } from '../models/sort.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -17,10 +18,13 @@ export class UserService {
 
     constructor(private http: HttpClient) { }
 
-    public getAllUsers(searchTerm?: string): Observable<User[]> {
+    public getAllUsers(searchTerm?: string, sort?: SortOptions): Observable<User[]> {
         let params: HttpParams;
         if (!!searchTerm) {
             params = new HttpParams().set('searchTerm', searchTerm);
+        }
+        if (!!sort) {
+            params = new HttpParams().set('sort', sort);
         }
         return this.http.get<User[]>(`${this.BASE_PATH}/all`, { params }).pipe(
             map((json: User[]) => json),
