@@ -36,11 +36,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let user of (users$ | async)" class="cursor-pointer" (click)="onEditUser(user)">
-                                <td>#</td>
-                                <td>{{user.name}}</td>
-                                <td>{{user.surname}}</td>
-                            </tr>
+                            <ng-container *ngIf="(users$ | async)?.length > 0; else loading">
+                                <tr *ngFor="let user of (users$ | async)" class="cursor-pointer" (click)="onEditUser(user)">
+                                    <td>#</td>
+                                    <td>{{user.name}}</td>
+                                    <td>{{user.surname}}</td>
+                                </tr>
+                            </ng-container>
+                            <ng-template #loading>
+                                <tr class="text-center">
+                                    <td colspan="3" class="fw-bold">There are no records to show!</td>
+                                </tr>
+                            </ng-template>
                         </tbody>
                     </table>
                 </div>
@@ -50,7 +57,7 @@
                 <div class="p-3">
                     <app-user-form 
                         [user]="selectedUser"
-                        [subscription]="updateUserSubscription" 
+                        [subscription]="updateUserSubscription || removeUserSubscription" 
                         (onSubmit)="handleOnUpdateUser($event)"
                         (onDelete)="handleOnDelete($event)" 
                         (onCancel)="handleOnCancel()"></app-user-form>

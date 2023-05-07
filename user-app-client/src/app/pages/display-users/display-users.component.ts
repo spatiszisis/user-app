@@ -19,6 +19,7 @@ export class DisplayUsersComponent implements OnInit {
   private search$: Observable<string> = this.searchTerm.asObservable();
   isSearching = false;
   updateUserSubscription: Subscription;
+  removeUserSubscription: Subscription;
 
   constructor(private userService: UserService, private toastService: ToastService) { }
 
@@ -40,7 +41,7 @@ export class DisplayUsersComponent implements OnInit {
   }
 
   handleOnDelete(user: User) {
-    this.userService.deleteUser(user).subscribe(() => {
+    this.removeUserSubscription = this.userService.deleteUser(user).subscribe(() => {
       this.clearUser();
       this.toastService.showDanger(`The user has been deleted.`);
     });

@@ -50,7 +50,7 @@ export class UserService {
         };
         return this.http.put<User>(this.BASE_PATH, userResource).pipe(
             map((json: any) => json),
-            tap((user: User) => this.user.next(user))
+            mergeMap((user: User) => this.getAllUsers().pipe(map(() => user)))
         );
     }
 

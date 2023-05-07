@@ -55,8 +55,7 @@
         <ng-container *ngIf="!!user.name">
             <app-button 
                 [text]="'Delete'" 
-                [style]="buttonStyle.DANGER" 
-                (submit)="onCreate()"
+                [style]="buttonStyle.DANGER"
                 [autoClose]="'outside'"
                 [ngbPopover]="deleteLevelPopoverTemplate" 
                 #popover="ngbPopover"
@@ -73,9 +72,17 @@
 </form>
 
 <ng-template #deleteLevelPopoverTemplate>
-    <p>Do you want to delete this level?</p>
+    <h5>Do you want to delete this level?</h5>
     <div class="d-flex align-items-center justify-content-around">
-        <button class="btn btn-sm btn-danger" (click)="handleOnDelete()">Yes</button>
-        <button class="btn btn-sm btn-secondary" (click)="onClosePopover()">No</button>
+        <app-button 
+            [text]="'Delete'" 
+            [style]="buttonStyle.DANGER"
+            (click)="handleOnDelete()"
+        ></app-button>
+        <app-button 
+            [text]="'No'" 
+            [style]="buttonStyle.SECONDARY" 
+            (submit)="onClosePopover()"
+        ></app-button>
     </div>
 </ng-template>
