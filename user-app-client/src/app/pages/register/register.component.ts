@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription, delay } from 'rxjs';
 import { User } from 'src/app/models/user.model';
-import { DateService } from 'src/app/services/date.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -9,29 +10,15 @@ import { UserService } from 'src/app/services/user.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
+  saveUserSubscription: Subscription;
 
-  constructor(private userService: UserService, private dateService: DateService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private toastService: ToastService) { }
 
-  ngOnInit(): void {
-
-  }
-
-  handleOnSubmit(user: any) {
-    const newUser = new User().deserialize({
-      name: user.name,
-      surname: user.surname,
-      gender: user.gender,
-      birthdate: this.dateService.formatDate(user.birthdate),
-      homeAddress: !!user.homeAddress ? {
-        name: user.homeAddress
-      } : null,
-      workAddress: !!user.workAddress ? {
-        name: user.workAddress
-      } : null
-    });
-    this.userService.createUser(newUser).subscribe(() => {
+  handleOnSubmit(user: User) {
+    this.saveUserSubscription = this.userService.createUser(user).pipe(delay(2000)).subscribe(() => {
       this.router.navigate(['users']);
+      this.toastService.showSuccess(`The user ${user.fullName()} has been created.`);
     });
   }
 }

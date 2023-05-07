@@ -1,39 +1,60 @@
 <app-heading [text]="'Users List'"></app-heading>
 <div class="p-4">
-    <ul class="nav nav-tabs" id="tabList" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" [ngClass]="{'active': !selectedUser}" id="users-tab" data-bs-toggle="tab"
-                data-bs-target="#home-users-tab" type="button" role="tab" aria-controls="home-users-tab"
-                aria-selected="true" [disabled]="!!selectedUser">All Users</button>
-        </li>
-    </ul>
-    <div class="tab-content" id="myTabContent">
-        <div *ngIf="!selectedUser" class="users-tab fade" [ngClass]="{'show active': !selectedUser}" id="home-users-tab"
-            role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Surname</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let user of (users$ | async)" class="cursor-pointer" (click)="onEditUser(user)">
-                            <td>#</td>
-                            <td>{{user.name}}</td>
-                            <td>{{user.surname}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+    <ng-container *ngIf="!selectedUser">
+        <div class="row">
+            <a [routerLink]="'/register'" class="btn btn-primary text-white"><i
+                    class="bi bi-plus-circle me-2"></i>Register
+                a
+                new
+                user</a>
+        </div>
+        <div class="row mt-4">
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text" id="addon-wrapping"><i class="bi bi-search"></i></span>
+                <input type="search" class="form-control" placeholder="Search by name or surname" (input)="onSearch($event)">
             </div>
         </div>
-        <div *ngIf="selectedUser" class="users-tab" [ngClass]="{'fade': !selectedUser}" id="nav-user" role="tabpanel"
-            aria-labelledby="nav-user-tab" tabindex="0">
-            <div class="p-3">
-                <app-user-form [user]="selectedUser" (onSubmit)="handleOnSubmit($event)" (onDelete)="handleOnDelete()"
-                    (onCancel)="handleOnCancel()"></app-user-form>
+    </ng-container>
+    <div class="row mt-4">
+        <ul class="nav nav-tabs" id="tabList" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" [ngClass]="{'active': !selectedUser}" id="users-tab" data-bs-toggle="tab"
+                    data-bs-target="#home-users-tab" type="button" role="tab" aria-controls="home-users-tab"
+                    aria-selected="true" [disabled]="!!selectedUser">All Users</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div *ngIf="!selectedUser" class="users-tab fade" [ngClass]="{'show active': !selectedUser}"
+                id="home-users-tab" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Surname</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of (users$ | async)" class="cursor-pointer" (click)="onEditUser(user)">
+                                <td>#</td>
+                                <td>{{user.name}}</td>
+                                <td>{{user.surname}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div *ngIf="selectedUser" class="users-tab" [ngClass]="{'fade': !selectedUser}" id="nav-user"
+                role="tabpanel" aria-labelledby="nav-user-tab" tabindex="0">
+                <div class="p-3">
+                    <app-user-form 
+                        [user]="selectedUser"
+                        [subscription]="updateUserSubscription" 
+                        (onSubmit)="handleOnUpdateUser($event)"
+                        (onDelete)="handleOnDelete($event)" 
+                        (onCancel)="handleOnCancel()"></app-user-form>
+                </div>
             </div>
         </div>
     </div>

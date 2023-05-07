@@ -9,6 +9,9 @@ export class User {
     workAddress?: Address;
     homeAddress?: Address;
 
+    fullName(): string {
+        return `${this.name} ${this.surname}`;
+    }
 
     deserialize(input: any): this {
         return Object.assign(this, input);

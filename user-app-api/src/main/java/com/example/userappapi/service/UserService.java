@@ -26,30 +26,30 @@ public class UserService {
     }
 
     public User getUser(String name, String surname) {
-        return this.userRepository.findByNameAndSurname(name, surname);
+        return this.getUserByNameAndSurname(name, surname);
     }
 
     public User createUser(User user) {
         return userRepository.save(user);
     }
 
-    public User updateUser(User user, Long userId) {
-        User existingUser = this.getUserById(userId);
-        existingUser.setName(user.getName());
-        existingUser.setSurname(user.getSurname());
-        existingUser.setGender(user.getGender());
-        existingUser.setBirthdate(user.getBirthdate());
-        existingUser.setHomeAddress(user.getHomeAddress());
-        existingUser.setWorkAddress(user.getWorkAddress());
+    public User updateUser(User updateUser, User currentUser) {
+        User existingUser = this.getUserByNameAndSurname(currentUser.getName(), currentUser.getSurname());
+        existingUser.setName(updateUser.getName());
+        existingUser.setSurname(updateUser.getSurname());
+        existingUser.setGender(updateUser.getGender());
+        existingUser.setBirthdate(updateUser.getBirthdate());
+        existingUser.setHomeAddress(updateUser.getHomeAddress());
+        existingUser.setWorkAddress(updateUser.getWorkAddress());
         return userRepository.save(existingUser);
     }
 
-    public void deleteUser(Long userId) {
-        User existingUser = this.getUserById(userId);
+    public void deleteUser(String name, String surname) {
+        User existingUser = this.getUserByNameAndSurname(name, surname);
         userRepository.delete(existingUser);
     }
 
-    private User getUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    private User getUserByNameAndSurname(String name, String surname) {
+        return userRepository.findByNameAndSurname(name, surname);
     }
 }

@@ -1,4 +1,4 @@
 <app-heading [text]="'Register a User'"></app-heading>
 <div class="p-4">
-    <app-user-form (onSubmit)="handleOnSubmit($event)"></app-user-form>
+    <app-user-form [subscription]="saveUserSubscription" (onSubmit)="handleOnSubmit($event)"></app-user-form>
 </div>

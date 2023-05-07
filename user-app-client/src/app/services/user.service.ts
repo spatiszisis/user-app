@@ -17,15 +17,19 @@ export class UserService {
 
     constructor(private http: HttpClient) { }
 
-    public getAllUsers(): Observable<User[]> {
-        return this.http.get<User[]>(`${this.BASE_PATH}/all`).pipe(
+    public getAllUsers(searchTerm?: string): Observable<User[]> {
+        let params: HttpParams;
+        if (!!searchTerm) {
+            params = new HttpParams().set('searchTerm', searchTerm);
+        }
+        return this.http.get<User[]>(`${this.BASE_PATH}/all`, { params }).pipe(
             map((json: User[]) => json),
             tap((users: User[]) => this.users.next(users))
         );
     }
 
-    public getUser(name: string, surname: string): Observable<User> {
-        const params: HttpParams = new HttpParams().set('name', name).set('surname', surname);
+    public getUser(user: User): Observable<User> {
+        const params: HttpParams = new HttpParams().set('name', user.name).set('surname', user.surname);
         return this.http.get(this.BASE_PATH, { params }).pipe(
             map((json: any) => json),
             tap((user: User) => this.user.next(user))
@@ -39,15 +43,20 @@ export class UserService {
         );
     }
 
-    public updateUser(userUpdate: any): Observable<User> {
-        return this.http.put<User>(this.BASE_PATH, userUpdate).pipe(
+    public updateUser(updatedUser: User, currentUser: User): Observable<User> {
+        const userResource = {
+            updatedUser: updatedUser,
+            currentUser: currentUser
+        };
+        return this.http.put<User>(this.BASE_PATH, userResource).pipe(
             map((json: any) => json),
             tap((user: User) => this.user.next(user))
         );
     }
 
-    public deleteUser(id: number): Observable<any> {
-        return this.http.delete(`${this.BASE_PATH}/${id}`).pipe(
+    public deleteUser(user: User): Observable<any> {
+        const params: HttpParams = new HttpParams().set('name', user.name).set('surname', user.surname);
+        return this.http.delete(this.BASE_PATH, { params }).pipe(
             mergeMap(() => this.getAllUsers().pipe(map(() => null)))
         );
     }

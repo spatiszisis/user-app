@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject, debounceTime, switchMap, tap } from 'rxjs';
 import { User } from 'src/app/models/user.model';
+import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-display-users',
@@ -13,19 +15,35 @@ export class DisplayUsersComponent implements OnInit {
   users$: Observable<User[]>;
   selectedUser: User;
   selectedUserLi: any;
+  protected searchTerm: Subject<string> = new Subject();
+  private search$: Observable<string> = this.searchTerm.asObservable();
+  isSearching = false;
+  updateUserSubscription: Subscription;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.users$ = this.userService.users$;
+
+    this.search$.pipe(
+      tap(() => this.isSearching = true),
+      debounceTime(500),
+      switchMap(searchTerm => this.userService.getAllUsers(searchTerm))
+    ).subscribe(() => this.isSearching = false);
   }
 
-  handleOnSubmit(user: any) {
-    console.log(user);
+  handleOnUpdateUser(updatedUser: User) {
+    this.updateUserSubscription = this.userService.updateUser(updatedUser, this.selectedUser).subscribe(() => {
+      this.clearUser();
+      this.toastService.showSuccess(`The user ${updatedUser.fullName()} has been updated.`);
+    });
   }
 
-  handleOnDelete() {
-    this.clearUser();
+  handleOnDelete(user: User) {
+    this.userService.deleteUser(user).subscribe(() => {
+      this.clearUser();
+      this.toastService.showDanger(`The user has been deleted.`);
+    });
   }
 
   handleOnCancel() {
@@ -33,10 +51,19 @@ export class DisplayUsersComponent implements OnInit {
   }
 
   onEditUser(user: User) {
-    this.userService.getUser(user.name, user.surname).subscribe((user: User) => {
+    this.userService.getUser(user).subscribe((user: User) => {
       this.selectedUser = user;
       this.createEditTab(user.name);
-    }); 
+    });
+  }
+
+  onSearch(event: Event) {
+    const inputText = event?.target['value'];
+    this.searchTerm.next(inputText);
+  }
+
+  onClearSearch() {
+    this.searchTerm.next('');
   }
 
   private clearUser() {

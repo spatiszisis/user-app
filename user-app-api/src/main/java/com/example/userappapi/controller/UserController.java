@@ -1,5 +1,6 @@
 package com.example.userappapi.controller;
 
+import com.example.userappapi.model.UpdateUserResource;
 import com.example.userappapi.model.User;
 import com.example.userappapi.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -35,14 +36,16 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(user));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable(value = "id") Long id) {
-        return ResponseEntity.ok(userService.updateUser(user, id));
+    @PutMapping()
+    public ResponseEntity<User> updateUser(@RequestBody UpdateUserResource user) {
+        return ResponseEntity.ok(userService.updateUser(user.getUpdatedUser(), user.getCurrentUser()));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable(name = "id") Long id) {
-        userService.deleteUser(id);
+    @DeleteMapping()
+    public ResponseEntity<Void> deleteUser(
+            @RequestParam(value = "name", required = true) String name,
+            @RequestParam(value = "surname", required = true) String surname) {
+        userService.deleteUser(name, surname);
         return ResponseEntity.noContent().build();
     }
 }

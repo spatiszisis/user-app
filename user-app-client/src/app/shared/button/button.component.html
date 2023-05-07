@@ -1,0 +1,17 @@
+<button 
+    class="btn" 
+    [ngClass]="{
+        'btn-primary': style === buttonStyle.PRIMARY, 
+        'btn-danger': style === buttonStyle.DANGER, 
+        'btn-secondary': style === buttonStyle.SECONDARY}" 
+    type="button" 
+    (click)="submit.emit()"
+>
+    <span *ngIf="loading">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Loading...
+    </span>
+    <span *ngIf="!loading">
+        {{text}}
+    </span>
+</button>
