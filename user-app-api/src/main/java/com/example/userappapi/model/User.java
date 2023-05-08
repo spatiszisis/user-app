@@ -1,9 +1,8 @@
 package com.example.userappapi.model;
 
 import jakarta.persistence.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "user")
@@ -39,7 +38,7 @@ public class User {
             name = "birthdate",
             nullable = false
     )
-    private String birthdate;
+    private LocalDate birthdate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_homeaddress_id")
@@ -51,7 +50,7 @@ public class User {
     public User() {
     }
 
-    public User(String name, String surname, Gender gender, String birthdate, HomeAddress homeAddress, WorkAddress workAddress) {
+    public User(String name, String surname, Gender gender, LocalDate birthdate, HomeAddress homeAddress, WorkAddress workAddress) {
         this.name = name;
         this.surname = surname;
         this.gender = gender;
@@ -92,11 +91,11 @@ public class User {
         this.gender = gender;
     }
 
-    public String getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 

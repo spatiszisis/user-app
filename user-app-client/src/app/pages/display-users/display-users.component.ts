@@ -16,34 +16,37 @@ export class DisplayUsersComponent implements OnInit {
   users$: Observable<User[]>;
   selectedUser: User;
   selectedUserLi: any;
-  protected searchTerm: Subject<string> = new Subject();
-  private search$: Observable<string> = this.searchTerm.asObservable();
+  searchTerm: Subject<string> = new Subject();
+  search$: Observable<string> = this.searchTerm.asObservable();
   isSearching = false;
   updateUserSubscription: Subscription;
   removeUserSubscription: Subscription;
   sortOptions = SortOptions;
+  selectedPage = 0;
+  pages$: Observable<number[]>;
 
   constructor(private userService: UserService, private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.users$ = this.userService.users$;
+    this.pages$ = this.userService.pages$;
 
     this.search$.pipe(
       tap(() => this.isSearching = true),
       debounceTime(500),
-      switchMap(searchTerm => this.userService.getAllUsers(searchTerm))
+      switchMap(searchTerm => !!searchTerm ? this.userService.searchUser(searchTerm) : this.userService.getAllUsers(0))
     ).subscribe(() => this.isSearching = false);
   }
 
   handleOnUpdateUser(updatedUser: User) {
-    this.updateUserSubscription = this.userService.updateUser(updatedUser, this.selectedUser).subscribe(() => {
+    this.updateUserSubscription = this.userService.updateUser(updatedUser, this.selectedUser.id).subscribe(() => {
       this.clearUser();
       this.toastService.showSuccess(`The user ${updatedUser.fullName()} has been updated.`);
     });
   }
 
   handleOnDelete(user: User) {
-    this.removeUserSubscription = this.userService.deleteUser(user).subscribe(() => {
+    this.removeUserSubscription = this.userService.deleteUser(user.id).subscribe(() => {
       this.clearUser();
       this.toastService.showDanger(`The user has been deleted.`);
     });
@@ -54,7 +57,7 @@ export class DisplayUsersComponent implements OnInit {
   }
 
   onEditUser(user: User) {
-    this.userService.getUser(user).subscribe((user: User) => {
+    this.userService.getUser(user.id).subscribe((user: User) => {
       this.selectedUser = user;
       this.createEditTab(user.name);
     });
@@ -71,13 +74,20 @@ export class DisplayUsersComponent implements OnInit {
 
   onSortByName(sort: any) {
     console.log(sort.target.value);
-    this.userService.getAllUsers(null, sort.target.value as SortOptions).subscribe();
+    this.userService.getAllUsers(0, sort.target.value as SortOptions).subscribe();
+  }
+
+  handleClickPage(i: number, event: Event) {
+    event.preventDefault();
+    this.selectedPage = i;
+    this.userService.getAllUsers(i).subscribe();
   }
 
   private clearUser() {
     this.selectedUser = undefined;
     this.selectedUserLi.remove();
-
+    this.selectedPage = 0;
+    this.userService.getAllUsers(this.selectedPage).subscribe();
   }
 
   private createEditTab(userName: string) {

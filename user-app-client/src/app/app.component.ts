@@ -8,7 +8,7 @@ import { ToastService } from './services/toast.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(private userService: UserService, private toastService: ToastService) { 
-    this.userService.getAllUsers().subscribe();
+  constructor(private userService: UserService, private toastService: ToastService) {
+    this.userService.getAllUsers(0).subscribe();
   }
 }

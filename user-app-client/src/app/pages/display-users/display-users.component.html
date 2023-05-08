@@ -17,8 +17,8 @@
             <div class="mt-4">
                 <select class="form-select" (change)="onSortByName($event)">
                     <option value="">Default</option>
-                    <option [value]="sortOptions.ASC">Ascending</option>
-                    <option [value]="sortOptions.DESC">Descending</option>
+                    <option [value]="sortOptions.ASC">Ascending by name</option>
+                    <option [value]="sortOptions.DESC">Descending by name</option>
                 </select>
             </div>
         </div>
@@ -38,6 +38,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
+                                <th scope="col">#</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Surname</th>
                             </tr>
@@ -46,6 +47,7 @@
                             <ng-container *ngIf="(users$ | async)?.length > 0; else loading">
                                 <tr *ngFor="let user of (users$ | async)" class="cursor-pointer"
                                     (click)="onEditUser(user)">
+                                    <td>{{user.id}}</td>
                                     <td>{{user.name}}</td>
                                     <td>{{user.surname}}</td>
                                 </tr>
@@ -58,6 +60,14 @@
                         </tbody>
                     </table>
                 </div>
+                <nav *ngIf="!(search$ | async)">
+                    <ul class="pagination pagination-sm">
+                        <li *ngFor="let page of (pages$ | async); let i=index" class="page-item" [ngClass]="{'active': selectedPage == i}"
+                            aria-current="page">
+                            <span (click)="handleClickPage(i, $event)" class="page-link cursor-pointer">{{i + 1}}</span>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             <div *ngIf="selectedUser" class="users-tab" [ngClass]="{'fade': !selectedUser}" id="nav-user"
                 role="tabpanel" aria-labelledby="nav-user-tab" tabindex="0">

@@ -1,6 +1,7 @@
 package com.example.userappapi.repository;
 
 import com.example.userappapi.model.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findByNameAndSurname(String name, String surname);
     @Query("select user from User user " +
             "where lower(user.name) like lower(concat('%', :searchTerm, '%')) " +
             "or lower(user.surname) like lower(concat('%', :searchTerm, '%'))")

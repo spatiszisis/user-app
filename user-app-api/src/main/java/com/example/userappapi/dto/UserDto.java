@@ -1,13 +1,12 @@
-package com.example.userappapi.resource;
+package com.example.userappapi.dto;
 
 import com.example.userappapi.model.Gender;
 import com.example.userappapi.model.HomeAddress;
-import com.example.userappapi.model.User;
 import com.example.userappapi.model.WorkAddress;
 
 import java.time.LocalDate;
 
-public class UserResource {
+public class UserDto {
 
     private Long id;
     public Long getId() { return id; }
@@ -16,6 +15,10 @@ public class UserResource {
     private String name;
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+
+    private String surname;
+    public String getSurname() { return surname; }
+    public void setSurname(String surname) { this.surname = surname; }
 
     private Gender gender;
     public Gender getGender() { return gender; }

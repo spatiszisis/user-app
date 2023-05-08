@@ -1,4 +1,4 @@
-package com.example.userappapi.converters;
+package com.example.userappapi.converter;
 
 import com.example.userappapi.dto.UserDto;
 import com.example.userappapi.model.User;
