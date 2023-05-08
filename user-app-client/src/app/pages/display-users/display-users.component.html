@@ -73,7 +73,7 @@
                 role="tabpanel" aria-labelledby="nav-user-tab" tabindex="0">
                 <div class="p-3">
                     <app-user-form [user]="selectedUser"
-                        [subscription]="updateUserSubscription || removeUserSubscription"
+                        [subscription]="updateUserSubscription"
                         (onSubmit)="handleOnUpdateUser($event)" (onDelete)="handleOnDelete($event)"
                         (onCancel)="handleOnCancel()"></app-user-form>
                 </div>
