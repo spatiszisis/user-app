@@ -1,15 +1,13 @@
-package com.example.userappapi.converter;
+package com.example.userappapi.utils;
 
 import com.example.userappapi.dto.UserDto;
 import com.example.userappapi.model.User;
 import org.springframework.stereotype.Component;
-import org.springframework.core.convert.converter.Converter;
 
 @Component
-public class UserConverter implements Converter<User, UserDto> {
+public class UserConverter {
 
-    @Override
-    public UserDto convert(User user) {
+    public UserDto convertToUserDto(User user) {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());

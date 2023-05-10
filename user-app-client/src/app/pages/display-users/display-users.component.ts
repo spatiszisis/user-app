@@ -4,7 +4,6 @@ import { User } from 'src/app/models/user.model';
 import { ToastService } from 'src/app/services/toast.service';
 import { UserService } from 'src/app/services/user.service';
 import { Subscription } from 'rxjs';
-import { SortOptions } from 'src/app/models/sort.enum';
 
 @Component({
   selector: 'app-display-users',
@@ -20,8 +19,9 @@ export class DisplayUsersComponent implements OnInit {
   search$: Observable<string> = this.searchTerm.asObservable();
   isSearching = false;
   updateUserSubscription: Subscription;
-  sortOptions = SortOptions;
   selectedPage = 0;
+  selectPageSize = 4;
+  selectedSortOption = '';
   pages$: Observable<number[]>;
 
   constructor(private userService: UserService, private toastService: ToastService) { }
@@ -71,22 +71,27 @@ export class DisplayUsersComponent implements OnInit {
     this.searchTerm.next('');
   }
 
-  onSortByName(sort: any) {
-    console.log(sort.target.value);
-    this.userService.getAllUsers(0, sort.target.value as SortOptions).subscribe();
+  onSortBy(sortProperty: string) {
+    this.selectedSortOption = sortProperty;
+    this.userService.getAllUsers(this.selectedPage, this.selectPageSize, this.selectedSortOption).subscribe();
   }
 
-  handleClickPage(i: number, event: Event) {
+  handleClickPage(page: number, event: Event) {
     event.preventDefault();
-    this.selectedPage = i;
-    this.userService.getAllUsers(i).subscribe();
+    this.selectedPage = page;
+    this.userService.getAllUsers(this.selectedPage, this.selectPageSize, this.selectedSortOption).subscribe();
+  }
+
+  onChangeSizePage(sizePage: any) {
+    this.selectPageSize = sizePage.target.value;
+    this.userService.getAllUsers(0, this.selectPageSize, this.selectedSortOption).subscribe();
   }
 
   private clearUser() {
     this.selectedUser = undefined;
     this.selectedUserLi.remove();
     this.selectedPage = 0;
-    this.userService.getAllUsers(this.selectedPage).subscribe();
+    this.userService.getAllUsers(this.selectedPage, this.selectPageSize, this.selectedSortOption).subscribe();
   }
 
   private createEditTab(userName: string) {

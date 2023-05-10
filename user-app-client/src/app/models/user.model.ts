@@ -1,4 +1,4 @@
-import { Address } from "./address.model";
+import { UserAddress } from "./user-address.model";
 import { Gender } from "./gender.enum";
 
 export class User {
@@ -7,8 +7,7 @@ export class User {
     surname: string;
     gender: Gender;
     birthdate: string;
-    workAddress?: Address;
-    homeAddress?: Address;
+    userAddress?: UserAddress;
 
     fullName(): string {
         return `${this.name} ${this.surname}`;

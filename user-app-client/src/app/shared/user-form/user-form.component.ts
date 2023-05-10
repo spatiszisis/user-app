@@ -51,12 +51,10 @@ export class UserFormComponent implements OnInit {
       surname: userFormValue.surname,
       gender: userFormValue.gender,
       birthdate: this.dateService.formatDate(userFormValue.birthdate),
-      homeAddress: !!userFormValue.homeAddress ? {
-        name: userFormValue.homeAddress
+      userAddress: !!userFormValue.homeAddress || !!userFormValue.workAddress ? {
+        homeAddress: userFormValue.homeAddress,
+        workAddress: userFormValue.workAddress
       } : null,
-      workAddress: !!userFormValue.workAddress ? {
-        name: userFormValue.workAddress
-      } : null
     });
 
     this.onSubmit.emit(newUser);
@@ -80,8 +78,8 @@ export class UserFormComponent implements OnInit {
       surname: [this.user.surname, [Validators.required]],
       gender: [this.user.gender, [Validators.required]],
       birthdate: [this.dateService.parseDate(this.user.birthdate), [Validators.required]],
-      workAddress: [this.user.workAddress?.name],
-      homeAddress: [this.user.homeAddress?.name]
+      workAddress: [this.user.userAddress?.workAddress],
+      homeAddress: [this.user.userAddress?.homeAddress]
     }
 
     this.userForm = this.formBuilder.group(controls);

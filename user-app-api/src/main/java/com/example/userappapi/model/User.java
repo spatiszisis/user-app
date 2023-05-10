@@ -40,23 +40,19 @@ public class User {
     )
     private LocalDate birthdate;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_homeaddress_id")
-    private HomeAddress homeAddress;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_workAddress_id")
-    private WorkAddress workAddress;
+    @OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @JoinColumn(name = "useraddress_id")
+    private UserAddress userAddress;
 
     public User() {
     }
 
-    public User(String name, String surname, Gender gender, LocalDate birthdate, HomeAddress homeAddress, WorkAddress workAddress) {
+    public User(String name, String surname, Gender gender, LocalDate birthdate, UserAddress userAddress) {
         this.name = name;
         this.surname = surname;
         this.gender = gender;
         this.birthdate = birthdate;
-        this.homeAddress = homeAddress;
-        this.workAddress = workAddress;
+        this.userAddress = userAddress;
     }
 
     public Long getId() {
@@ -99,32 +95,11 @@ public class User {
         this.birthdate = birthdate;
     }
 
-    public HomeAddress getHomeAddress() {
-        return homeAddress;
+    public UserAddress getUserAddress() {
+        return userAddress;
     }
 
-    public void setHomeAddress(HomeAddress homeAddress) {
-        this.homeAddress = homeAddress;
-    }
-
-    public WorkAddress getWorkAddress() {
-        return workAddress;
-    }
-
-    public void setWorkAddress(WorkAddress workAddress) {
-        this.workAddress = workAddress;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", gender=" + gender +
-                ", birthdate=" + birthdate +
-                ", homeAddress=" + homeAddress +
-                ", workAddress=" + workAddress +
-                '}';
+    public void setUserAddress(UserAddress userAddress) {
+        this.userAddress = userAddress;
     }
 }
