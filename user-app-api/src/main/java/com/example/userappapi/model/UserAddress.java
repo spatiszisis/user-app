@@ -7,15 +7,7 @@ import jakarta.persistence.*;
 @Table(name = "useraddress")
 public class UserAddress {
     @Id
-    @SequenceGenerator(
-            name = "useraddress_sequence",
-            sequenceName = "useraddress_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "useraddress_sequence"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "useraddress_id")
     private Long id;
     @Column(

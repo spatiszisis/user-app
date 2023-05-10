@@ -51,9 +51,9 @@ public class UserService {
     public UserDto createUser(UserDto userDtoBody) {
         try {
             User user = userConverter.converToUser(userDtoBody);
-            return Optional.of(userRepository.save(user)).map(userConverter::convertToUserDto).orElseThrow(() -> new ResourceNotFoundException("Could not create the user."));
+            return Optional.of(userRepository.save(user)).map(userConverter::convertToUserDto).orElseThrow(() -> new RuntimeException("Could not create the user."));
         } catch (Exception error) {
-            throw new ResourceNotFoundException(error.getMessage());
+            throw new RuntimeException(error.getMessage());
         }
     }
 
@@ -66,9 +66,9 @@ public class UserService {
             existingUser.setGender(updateUserDto.getGender());
             existingUser.setBirthdate(updateUserDto.getBirthdate());
             existingUser.setUserAddress(updateUserDto.getUserAddress());
-            return Optional.of(userRepository.save(existingUser)).map(userConverter::convertToUserDto).orElseThrow(() -> new ResourceNotFoundException("Could not update the user."));
+            return Optional.of(userRepository.save(existingUser)).map(userConverter::convertToUserDto).orElseThrow(() -> new RuntimeException("Could not update the user."));
         } catch (Exception error) {
-            throw new ResourceNotFoundException(error.getMessage());
+            throw new RuntimeException(error.getMessage());
         }
     }
 
