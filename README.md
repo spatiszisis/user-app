@@ -4,7 +4,7 @@ The project is a simple CRUD system that manage users and is implemented with th
 - Fronted: Angular
 - DBMS: MySQL
 
-## Enpoints
+## Endpoints
 `GET` `/api/user/all` -> Get all users based on the **pageNumber**, **pageSize** and/or the **sort property** that is sorted by ascending.
   - `pageNumber` param (required)
   - `pageSize` param (required)
