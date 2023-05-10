@@ -16,8 +16,18 @@ public class UserConverter implements Converter<User, UserDto> {
         userDto.setSurname(user.getSurname());
         userDto.setGender(user.getGender());
         userDto.setBirthdate(user.getBirthdate());
-        userDto.setHomeAddress(user.getHomeAddress());
-        userDto.setWorkAddress(user.getWorkAddress());
+        userDto.setUserAddress(user.getUserAddress());
         return userDto;
+    }
+
+    public User converToUser(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setName(userDto.getName());
+        user.setSurname(userDto.getSurname());
+        user.setGender(userDto.getGender());
+        user.setBirthdate(userDto.getBirthdate());
+        user.setUserAddress(userDto.getUserAddress());
+        return user;
     }
 }
