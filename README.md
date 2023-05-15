@@ -9,6 +9,7 @@ The project is a simple CRUD system that manage users and is implemented with th
   - `pageNumber` param (required)
   - `pageSize` param (required)
   - `sortProperty` param (not required)
+  - `sortDirection` param (not required)
 
 `GET` `/api/user/search` -> Search a user by name or surname.
   - `searchTerm` param (required)
