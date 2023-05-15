@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -34,7 +34,7 @@ export class UserFormComponent implements OnInit {
   @ViewChild('popover', { static: false })
   popoverRef: NgbPopover;
 
-  constructor(private formBuilder: FormBuilder, private dateService: DateService) { }
+  constructor(private formBuilder: FormBuilder, private dateService: DateService) {}
 
   ngOnInit(): void {
     this.buildForm();

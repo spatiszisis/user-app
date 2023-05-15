@@ -23,8 +23,9 @@ public class UserController {
     public ResponseEntity<Page<UserDto>> getUsers(
             @RequestParam(value = "pageNumber", required = true) Integer pageNumber,
             @RequestParam(value = "pageSize", required = true) Integer pageSize,
-            @RequestParam(value = "sortProperty", required = false) String sortProperty) {
-        return ResponseEntity.ok(userService.getAllUsers(pageNumber, pageSize, sortProperty));
+            @RequestParam(value = "sortProperty", required = false) String sortProperty,
+            @RequestParam(value = "sortDirection", required = false) String sortDirection) {
+        return ResponseEntity.ok(userService.getAllUsers(pageNumber, pageSize, sortProperty, sortDirection));
     }
 
     @GetMapping("/search")
@@ -35,29 +36,45 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(
+    public ResponseEntity getUser(
             @PathVariable(value = "id") Long id
     ) {
-        return ResponseEntity.ok(userService.getUser(id));
+        try {
+            return ResponseEntity.ok(userService.getUser(id));
+        } catch (Exception error) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage());
+        }
     }
 
     @PostMapping()
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.createUser(userDto));
+    public ResponseEntity createUser(@RequestBody UserDto userDto) {
+        try {
+            return ResponseEntity.ok(userService.createUser(userDto));
+        } catch (Exception error) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(
+    public ResponseEntity updateUser(
             @PathVariable(value = "id") Long id,
             @RequestBody UserDto updatedUserDto
     ) {
-        return ResponseEntity.ok(userService.updateUser(updatedUserDto, id));
+        try {
+            return ResponseEntity.ok(userService.updateUser(updatedUserDto, id));
+        } catch (Exception error) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(
+    public ResponseEntity deleteUser(
             @PathVariable(value = "id") Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception error) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage());
+        }
     }
 }

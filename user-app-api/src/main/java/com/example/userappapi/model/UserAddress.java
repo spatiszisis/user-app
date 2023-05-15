@@ -11,11 +11,11 @@ public class UserAddress {
     @Column(name = "useraddress_id")
     private Long id;
     @Column(
-            name = "homeAddress"
+            name = "home_Address"
     )
     private String homeAddress;
     @Column(
-            name = "workAddress"
+            name = "work_Address"
     )
     private String workAddress;
 

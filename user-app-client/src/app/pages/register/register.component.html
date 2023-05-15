@@ -1,4 +1,6 @@
 <app-heading [text]="'Register new User'"></app-heading>
 <div class="p-4">
     <app-user-form [subscription]="saveUserSubscription" (onSubmit)="handleOnSubmit($event)"></app-user-form>
+
+    <div *ngIf="!!serverError" class="alert alert-danger mt-4" role="alert">{{serverError}}</div>
 </div>

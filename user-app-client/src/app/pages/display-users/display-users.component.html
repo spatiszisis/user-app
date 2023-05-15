@@ -31,8 +31,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th class="cursor-pointer tag" scope="col" (click)="onSortBy('name')">Name</th>
-                                <th class="cursor-pointer tag" scope="col" (click)="onSortBy('surname')">Surname</th>
+                                <th class="cursor-pointer tag" scope="col" (click)="onSortByDirection('name')">Name <span *ngIf="(isASCSortOption(sortDirection) || isDESCSortOption(sortDirection)) && selectedSortOption === 'name'"><i *ngIf="isASCSortOption(sortDirection) && selectedSortOption === 'name'" class="bi bi-caret-up-fill"></i><i *ngIf="isDESCSortOption(sortDirection) && selectedSortOption === 'name'" class="bi bi-caret-down-fill"></i></span></th>
+                                <th class="cursor-pointer tag" scope="col" (click)="onSortByDirection('surname')">Surname <span *ngIf="(isASCSortOption(sortDirection) || isDESCSortOption(sortDirection)) && selectedSortOption === 'surname'"><i *ngIf="isASCSortOption(sortDirection) && selectedSortOption === 'surname'" class="bi bi-caret-up-fill"></i><i *ngIf="isDESCSortOption(sortDirection) && selectedSortOption === 'surname'" class="bi bi-caret-down-fill"></i></span></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -62,7 +62,7 @@
                         </ul>
                     </nav>
                     <div class="">
-                        <select class="form-select" (change)="onChangeSizePage($event)">
+                        <select class="form-select" [(ngModel)]="selectPageSize" (change)="onChangeSizePage($event)" >
                             <option [value]="4">4</option>
                             <option [value]="6">6</option>
                             <option [value]="10">10</option>
@@ -80,5 +80,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row mt-2">
+        <div *ngIf="!!serverError" class="alert alert-danger mt-4" role="alert">{{serverError}}</div>
     </div>
 </div>

@@ -9,6 +9,6 @@ import { ToastService } from './services/toast.service';
 })
 export class AppComponent {
   constructor(private userService: UserService, private toastService: ToastService) {
-    this.userService.getAllUsers(0).subscribe();
+    this.userService.getAllUsers().subscribe();
   }
 }

@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, map, mergeMap } from 'rxjs/operators';
 import { User } from '../models/user.model';
+import { SortDirection } from '../models/sort-direction.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -20,10 +21,10 @@ export class UserService {
 
     constructor(private http: HttpClient) { }
 
-    public getAllUsers(pageNumber: number, pageSize: number = 4, sortProperty: string = ''): Observable<User[]> {
+    public getAllUsers(pageNumber: number = 0, pageSize: number = 4, sortProperty: string = '', sortDirection: SortDirection = 'DEFAULT'): Observable<User[]> {
         let params: HttpParams = new HttpParams().set('pageNumber', pageNumber).set('pageSize', pageSize);
-        if (!!sortProperty) {
-            params = params.set('sortProperty', sortProperty);
+        if (!!sortProperty && !!sortDirection) {
+            params = params.set('sortProperty', sortProperty).set('sortDirection', sortDirection);
         }
         return this.http.get<User[]>(`${this.BASE_PATH}/all`, { params }).pipe(
             map((json: any) => json),
@@ -53,20 +54,20 @@ export class UserService {
     public createUser(user: User): Observable<User> {
         return this.http.post(this.BASE_PATH, user).pipe(
             map((json: any) => json),
-            mergeMap((user: User) => this.getAllUsers(0).pipe(map(() => user)))
+            mergeMap((user: User) => this.getAllUsers().pipe(map(() => user)))
         );
     }
 
     public updateUser(updatedUser: User, currentUserId: number): Observable<User> {
         return this.http.put<User>(`${this.BASE_PATH}/${currentUserId}`, updatedUser).pipe(
             map((json: any) => json),
-            mergeMap((user: User) => this.getAllUsers(0).pipe(map(() => user)))
+            mergeMap((user: User) => this.getAllUsers().pipe(map(() => user)))
         );
     }
 
     public deleteUser(id: number): Observable<any> {
         return this.http.delete(`${this.BASE_PATH}/${id}`).pipe(
-            mergeMap(() => this.getAllUsers(0).pipe(map(() => null)))
+            mergeMap(() => this.getAllUsers().pipe(map(() => null)))
         );
     }
 }

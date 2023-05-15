@@ -12,6 +12,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class RegisterComponent {
   saveUserSubscription: Subscription;
+  serverError: string;
 
   constructor(private userService: UserService, private router: Router, private toastService: ToastService) { }
 
@@ -19,6 +20,6 @@ export class RegisterComponent {
     this.saveUserSubscription = this.userService.createUser(user).pipe(delay(2000)).subscribe(() => {
       this.router.navigate(['users']);
       this.toastService.showSuccess(`The user ${user.fullName()} has been created.`);
-    });
+    }, error => this.serverError = error.error);
   }
 }
